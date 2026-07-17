@@ -1,0 +1,6 @@
+{
+  "httpMethod": "DELETE",
+  "path": "/tasks/seed-1",
+  "pathParameters": { "id": "seed-1" },
+  "body": null
+}

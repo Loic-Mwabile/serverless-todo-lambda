@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Serverless TODO REST API — AWS Lambda + API Gateway + DynamoDB.
+  Architecture:  Client -> API Gateway -> Lambda -> DynamoDB
+
+# Shared settings applied to all functions in this template.
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 10
+    MemorySize: 128
+    Architectures:
+      - x86_64
+
+Resources:
+  # ---------- DynamoDB table that stores the tasks ----------
+  TasksTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: TodoTasks
+      BillingMode: PAY_PER_REQUEST   # on-demand: no capacity to manage, cheap for demos
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+
+  # ---------- Lambda function that handles every route ----------
+  TodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: todo-api-handler
+      CodeUri: ./
+      Handler: src/handler.handler
+      Description: Handles GET/POST/PUT/DELETE for /tasks
+      Environment:
+        Variables:
+          # Presence of TABLE_NAME switches the app from in-memory to DynamoDB.
+          TABLE_NAME: !Ref TasksTable
+      # SAM generates a scoped IAM role granting exactly these DynamoDB
+      # permissions on the TasksTable (least privilege) — see README "IAM".
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TasksTable
+      # API Gateway routes wired to this single function (proxy integration).
+      Events:
+        ListTasks:
+          Type: Api
+          Properties:
+            Path: /tasks
+            Method: get
+        CreateTask:
+          Type: Api
+          Properties:
+            Path: /tasks
+            Method: post
+        UpdateTask:
+          Type: Api
+          Properties:
+            Path: /tasks/{id}
+            Method: put
+        DeleteTask:
+          Type: Api
+          Properties:
+            Path: /tasks/{id}
+            Method: delete
+
+Outputs:
+  ApiBaseUrl:
+    Description: Base URL of the deployed TODO API
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod'
+  TableName:
+    Description: DynamoDB table name
+    Value: !Ref TasksTable
+  FunctionName:
+    Description: Lambda function name
+    Value: !Ref TodoFunction

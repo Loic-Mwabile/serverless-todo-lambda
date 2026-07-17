@@ -1,0 +1,6 @@
+{
+  "httpMethod": "PUT",
+  "path": "/tasks/seed-2",
+  "pathParameters": { "id": "seed-2" },
+  "body": "{\"completed\": true}"
+}

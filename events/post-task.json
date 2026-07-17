@@ -1,0 +1,6 @@
+{
+  "httpMethod": "POST",
+  "path": "/tasks",
+  "pathParameters": null,
+  "body": "{\"title\": \"Write the SAM template\", \"completed\": false}"
+}

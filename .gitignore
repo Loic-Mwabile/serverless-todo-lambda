@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# SAM build artifacts
+.aws-sam/
+samconfig.toml
+
+# Env / logs
+.env
+*.log
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
