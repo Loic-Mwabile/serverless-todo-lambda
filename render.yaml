@@ -1,0 +1,22 @@
+# Render Blueprint — live demo deployment of the serverless TODO API.
+#
+# This runs the SAME Lambda handler (src/handler.js) via the lightweight HTTP
+# wrapper (src/local.js) as an always-on Node web service, so the in-memory
+# store persists and full CRUD works reliably in a demo.
+#
+# The AWS-native, truly-serverless path (API Gateway + Lambda + DynamoDB) remains
+# defined in template.yaml — see the README's "Deploying to AWS" section.
+services:
+  - type: web
+    name: serverless-todo-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /tasks     # handler returns the task list on any GET
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # TABLE_NAME is intentionally NOT set here, so the app uses its in-memory
+      # store. Set TABLE_NAME (+ AWS credentials) to switch to DynamoDB.

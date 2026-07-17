@@ -5,7 +5,8 @@
   "type": "module",
   "main": "src/handler.js",
   "scripts": {
-    "local": "node src/local.js"
+    "local": "node src/local.js",
+    "start": "node src/local.js"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.600.0",

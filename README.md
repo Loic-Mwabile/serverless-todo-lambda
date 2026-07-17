@@ -134,6 +134,27 @@ sam delete
 
 ---
 
+## Alternative: Live Demo Deployment on Render (no AWS account needed)
+
+The same Lambda handler (`src/handler.js`) can run on any Node host via the HTTP
+wrapper in `src/local.js`. This repo includes a `render.yaml` blueprint that
+deploys it to [Render](https://render.com) as an always-on web service — handy
+for a live demo when you don't have an AWS account.
+
+1. In the Render dashboard: **New +** → **Blueprint** → select this repo.
+2. Render reads `render.yaml` and provisions the `serverless-todo-api` service.
+3. Once **Live**, call it:
+   ```bash
+   curl https://<your-service>.onrender.com/tasks
+   ```
+
+> **Tradeoff:** Render runs this as a persistent service (so the in-memory store
+> works reliably), rather than as true per-request serverless functions. The
+> AWS-native, fully-serverless deployment (API Gateway + Lambda + DynamoDB) is
+> the one described above and defined in `template.yaml`.
+
+---
+
 ## IAM Role & Permissions
 
 Following the **principle of least privilege**, the Lambda function is granted
