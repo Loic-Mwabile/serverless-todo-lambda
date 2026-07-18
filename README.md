@@ -9,6 +9,15 @@ template.
 
 ---
 
+## Live Demo
+
+**🔗 https://serverless-todo-api.onrender.com/tasks** — the Lambda handler running
+live on Render (see [Alternative: Live Demo Deployment on Render](#alternative-live-demo-deployment-on-render-no-aws-account-needed)).
+
+![Live API](docs/api-response.png)
+
+---
+
 ## Architecture
 
 ```
